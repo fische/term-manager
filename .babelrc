@@ -1,0 +1,5 @@
+{
+  "plugins": ["syntax-flow"],
+  "presets": ["babel-preset-es2015"],
+  "comments": false
+}

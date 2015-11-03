@@ -1,0 +1,5 @@
+[options]
+module.system=node
+
+[ignore]
+.*/node_modules/*

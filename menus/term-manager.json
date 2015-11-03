@@ -1,0 +1,18 @@
+{
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "bottom-dock",
+          "submenu": [
+            {
+              "label": "Add Term Pane",
+              "command": "term-manager:add"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
