@@ -7,7 +7,7 @@ var notify = require('gulp-notify');
 gulp.task('flow', ['hint'], function() {
   return gulp.src(['src/**/*.js'], { write: false })
              .pipe(flow({
-               all: true,
+               all: false,
                weak: false,
                killFlow: false,
                beep: false,
@@ -29,13 +29,16 @@ gulp.task('hint', function() {
 
 gulp.task('build-dev', ['flow'], function() {
   return gulp.src(['src/**/*.js'])
-             .pipe(babel({}))
+             .pipe(babel({
+               sourceMaps: "inline"
+             }))
              .pipe(gulp.dest('lib'));
 });
 
 gulp.task('build-prod', ['flow'], function() {
   return gulp.src(['src/**/*.js'])
              .pipe(babel({
+               sourceMaps: false,
                compact: true
              }))
              .pipe(gulp.dest('lib'));
