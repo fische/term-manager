@@ -1,6 +1,6 @@
-var CompositeDisposable = require('atom').CompositeDisposable;
+import {CompositeDisposable} from 'atom'
 
-import {TermPaneView} from './views/term-pane';
+import {TermPaneView} from './views/TermPane'
 
 module.exports = {
   activate: function(state) {

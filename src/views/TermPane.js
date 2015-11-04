@@ -1,10 +1,8 @@
-var DockPaneView = require('atom-bottom-dock').DockPaneView;
+import {DockPaneView} from 'atom-bottom-dock'
+import {Emitter, CompositeDisposable} from 'atom'
+import {$} from 'space-pen'
 
-var ref = require('atom');
-var Emitter = ref.Emitter;
-var CompositeDisposable = ref.CompositeDisposable;
-
-var $ = require('space-pen').$;
+import {OutputView} from './Output'
 
 export class TermPaneView extends DockPaneView {
   initialize() {
@@ -23,11 +21,11 @@ export class TermPaneView extends DockPaneView {
 }
 
 TermPaneView.content = function() {
-  var self = this;
+  const self = this;
   return this.div({
-    "class": 'term-pane',
+    class: 'term-pane',
     style: 'display:flex;'
   }, function() {
-
+    return self.subview('outputView', new OutputView());
   });
 };

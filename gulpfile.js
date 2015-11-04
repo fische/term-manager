@@ -3,6 +3,7 @@ var babel = require('gulp-babel');
 var eslint = require('gulp-eslint');
 var flow = require('gulp-flowtype');
 var notify = require('gulp-notify');
+var changed = require('gulp-changed');
 
 gulp.task('flow', ['hint'], function() {
   return gulp.src(['src/**/*.js'], { write: false })
@@ -29,6 +30,7 @@ gulp.task('hint', function() {
 
 gulp.task('build-dev', ['flow'], function() {
   return gulp.src(['src/**/*.js'])
+             .pipe(changed('lib'))
              .pipe(babel({
                sourceMaps: "inline"
              }))
