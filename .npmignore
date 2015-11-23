@@ -5,3 +5,7 @@ lib/**/*.map
 gulpfile.js
 node_modules
 todo
+.babelrc
+.eslintrc
+.flowconfig
+.gitignore

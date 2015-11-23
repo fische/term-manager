@@ -15,9 +15,6 @@
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
-  "scripts": {
-    "prepublish": "rm -rf lib; gulp build-prod"
-  },
   "dependencies": {
     "ansi-to-html": "^0.3.0",
     "atom": "0.0.1",
