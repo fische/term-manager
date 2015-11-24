@@ -2,7 +2,7 @@ import {DockPaneView} from 'atom-bottom-dock'
 import {Emitter, CompositeDisposable} from 'atom'
 import {$} from 'space-pen'
 
-import {OutputView} from './Output'
+import {TerminalView} from './Terminal'
 
 export class TermPaneView extends DockPaneView {
   initialize() {
@@ -26,6 +26,6 @@ TermPaneView.content = function() {
     class: 'term-pane',
     style: 'display:flex;'
   }, function() {
-    return self.subview('outputView', new OutputView());
+    return self.subview('terminalView', new TerminalView());
   });
 };

@@ -5,6 +5,17 @@ var flow = require('gulp-flowtype');
 var notify = require('gulp-notify');
 var changed = require('gulp-changed');
 
+gulp.task('hint', function() {
+  return gulp.src(['src/**/*.js'], { write: false })
+             .pipe(eslint({
+               configFile: '.eslintrc',
+               useEslintrc: true
+             }))
+             .pipe(eslint.format())
+             .pipe(eslint.failAfterError())
+             .on('error', notify.onError('<%= error.message %>'));
+});
+
 gulp.task('flow', ['hint'], function() {
   return gulp.src(['src/**/*.js'], { write: false })
              .pipe(flow({
@@ -17,18 +28,7 @@ gulp.task('flow', ['hint'], function() {
              .on('error', notify.onError('<%= error.message %>'));
 });
 
-gulp.task('hint', function() {
-  return gulp.src(['src/**/*.js'], { write: false })
-             .pipe(eslint({
-               configFile: '.eslintrc',
-               useEslintrc: true
-             }))
-             .pipe(eslint.format())
-             .pipe(eslint.failAfterError())
-             .on('error', notify.onError('<%= error.message %>'));
-});
-
-gulp.task('build-dev', ['flow'], function() {
+gulp.task('build-dev', ['hint'], function() {
   return gulp.src(['src/**/*.js'])
              .pipe(changed('lib'))
              .pipe(babel({
