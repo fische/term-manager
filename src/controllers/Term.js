@@ -2,7 +2,7 @@ import pty from 'pty.js';
 import {Transform} from 'stream';
 
 export class TermController extends Transform {
-  constructor(options={}) {
+  constructor(options) {
     super(options);
 
     this.exited = false;

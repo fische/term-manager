@@ -4,6 +4,13 @@ import {InputTermController} from '../controllers/InputTerm'
 import {TermController} from '../controllers/Term'
 import {OutputTermController} from '../controllers/OutputTerm'
 
+String.prototype.repeat = function(num) {
+    return new Array(num + 1).join(this);
+}
+
+// TODO Option
+let max = 1000;
+
 export class TerminalView extends View {
   initialize() {
     this.subscriptions = new CompositeDisposable();
@@ -25,28 +32,49 @@ export class TerminalView extends View {
 
   setEvent() {
     let self = this;
-    addEventListener(this.terminal, 'click', function() {
+    this.addEventListener(this.output, 'click', function() {
       self.stdin.focus();
     });
   }
 
   setTerminal() {
     let input = new InputTermController(this.stdin);
-    let term = new TermController({
+    let output = new OutputTermController({
       term: {
-        cols: 30,
-        rows: 100
+        max: max
       }
     });
-    let output = new OutputTermController({});
+    // TODO Options
+    let term = new TermController({
+      term: {
+        cols: 100,
+        rows: 30
+      }
+    });
+
     let self = this;
     input
       .pipe(term)
       .pipe(output)
-      .on('update', function() {
-        self.output.html(output.getFormattedData());
+      .on('update', function(patch) {
+        self.update(patch, output);
         self.output.scrollTop(self.output[0].scrollHeight);
       });
+  }
+
+  update(patch, output) {
+    while (patch.deletion > 0) {
+      this.output[0].children[0].remove();
+      patch.deletion -= 1;
+    }
+    for (let line of patch.addition) {
+      if (line >= 0) {
+        if (line < this.output[0].children.length)
+          this.output[0].children[line].innerHTML = output.getLine(line);
+        else
+          this.output.append("<div>" + output.getLine(line) + "</div>");
+      }
+    }
   }
 }
 
@@ -55,7 +83,6 @@ TerminalView.content = function() {
   return this.div({
     class: 'terminal',
     style: 'display:flex;',
-    outlet: 'terminal',
     tabindex: -1
   }, function() {
     self.input({
