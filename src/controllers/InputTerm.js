@@ -28,6 +28,10 @@ export class InputTermController extends Readable {
         self.push(new Buffer(c));
         event.preventDefault();
       }
+      else if (c == "\x43" && event.ctrlKey) {
+        self.push(new Buffer("\x03"));
+        event.preventDefault();
+      }
     });
     this.addEventListener(this._source, "keypress", function(event) {
       self.push(new Buffer([event.keyCode]));
