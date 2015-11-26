@@ -3,6 +3,7 @@ import {$, View} from 'space-pen'
 import {InputTermController} from '../controllers/InputTerm'
 import {TermController} from '../controllers/Term'
 import {OutputTermController} from '../controllers/OutputTerm'
+import {spawn} from 'child_process'
 
 String.prototype.repeat = function(num) {
     return new Array(num + 1).join(this);
@@ -53,13 +54,19 @@ export class TerminalView extends View {
     });
 
     let self = this;
+    let child = spawn('node', ['lib/controllers/ChildTerm.js']);
+
     input
-      .pipe(term)
+      .pipe(child.stdin);
+    child.stdout
       .pipe(output)
       .on('update', function(patch) {
         self.update(patch, output);
         self.output.scrollTop(self.output[0].scrollHeight);
       });
+    // input
+    //   .pipe(term)
+    //   .pipe(output)
   }
 
   update(patch, output) {
