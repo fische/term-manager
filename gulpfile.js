@@ -4,6 +4,12 @@ var eslint = require('gulp-eslint');
 var flow = require('gulp-flowtype');
 var notify = require('gulp-notify');
 var changed = require('gulp-changed');
+var clean = require('gulp-clean');
+
+gulp.task('clean', function() {
+  return gulp.src('lib', { read: false })
+          .pipe(clean({ force: true }));
+});
 
 gulp.task('hint', function() {
   return gulp.src(['src/**/*.js'], { write: false })
