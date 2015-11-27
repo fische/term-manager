@@ -1,8 +1,8 @@
 import {CompositeDisposable} from 'atom'
 import {$, View} from 'space-pen'
 import {InputTermController} from '../controllers/InputTerm'
-import {TermController} from '../controllers/Term'
 import {OutputTermController} from '../controllers/OutputTerm'
+import {spawn} from 'child_pty'
 
 
 String.prototype.repeat = function(num) {
@@ -39,23 +39,26 @@ export class TerminalView extends View {
   }
 
   setTerminal() {
-    let input = new InputTermController(this.stdin);
+    // TODO Options
+    let child = spawn((process.env.SHELL ? process.env.SHELL : '/bin/sh'), [], {
+      name: (process.env.NAME ? process.env.NAME : 'xterm-color'),
+      cols: 100,
+      rows: 30,
+      cwd: (process.env.HOME ? process.env.HOME : '/home'),
+      env: (process.env ? process.env : {}),
+      stdio: ['pty', 'pty', 'pty']
+    });
+    let input = new InputTermController(this.stdin, child);
     let output = new OutputTermController({
       term: {
         max: max
       }
     });
-    // TODO Options
-    let term = new TermController({
-      term: {
-        cols: 100,
-        rows: 30
-      }
-    });
 
     let self = this;
     input
-      .pipe(term)
+      .pipe(child.stdin);
+    child.stdout
       .pipe(output)
       .on('update', function(patch) {
         self.update(patch, output);

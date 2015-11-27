@@ -2,10 +2,11 @@ import {CompositeDisposable} from 'atom'
 import {Readable} from 'stream'
 
 export class InputTermController extends Readable {
-  constructor(source, options={}) {
+  constructor(source, child, options={}) {
     super(options);
 
     this._source = source;
+    this._child = child;
     this.subscriptions = new CompositeDisposable();
 
     this.setEvent();
