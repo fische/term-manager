@@ -85,7 +85,7 @@ export class InputTermController extends Readable {
   }
 
   setEvent() {
-    let self = this;
+    const self = this;
     this.addEventListener(this._source, "keydown", function(event) {
       let c = String.fromCharCode(event.keyCode);
       self._addToBuffer(c);
@@ -117,5 +117,10 @@ export class InputTermController extends Readable {
 
   _read(size: number) {
 
+  }
+
+  destroy() {
+    this.subscriptions.dispose();
+    delete this.subscriptions;
   }
 }

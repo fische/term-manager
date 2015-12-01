@@ -1,21 +1,22 @@
 import {DockPaneView} from 'atom-bottom-dock'
-import {Emitter, CompositeDisposable} from 'atom'
 import {$} from 'space-pen'
 
 import {TerminalView} from './Terminal'
 
 export class TermPaneView extends DockPaneView {
-  initialize() {
+  initialize(emitter) {
     super.initialize();
+
+    const self = this;
+    this.terminalView.onExit(function() {
+      emitter.emit('exit', self);
+    });
+    this.terminalView.show();
   }
 
-  refresh() {}
-
-  stop() {}
-
-  clear() {}
-
   destroy() {
+    this.terminalView.destroy();
+    delete this.terminalView;
     this.remove();
   }
 }

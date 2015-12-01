@@ -5,10 +5,6 @@ import {OutputTermController} from '../controllers/OutputTerm'
 import {spawn} from 'child_pty'
 
 
-String.prototype.repeat = function(num) {
-    return new Array(num + 1).join(this);
-}
-
 // TODO Option
 let max = 1000;
 
@@ -32,15 +28,17 @@ export class TerminalView extends View {
   }
 
   setEvent() {
-    let self = this;
+    const self = this;
     this.addEventListener(this.output, 'click', function() {
       self.stdin.focus();
     });
   }
 
   setTerminal() {
+    const self = this;
+
     // TODO Options
-    let child = spawn((process.env.SHELL ? process.env.SHELL : '/bin/sh'), [], {
+    this._child = spawn((process.env.SHELL ? process.env.SHELL : '/bin/sh'), [], {
       name: (process.env.NAME ? process.env.NAME : 'xterm-color'),
       cols: 100,
       rows: 30,
@@ -48,20 +46,19 @@ export class TerminalView extends View {
       env: (process.env ? process.env : {}),
       stdio: ['pty', 'pty', 'pty']
     });
-    let input = new InputTermController(this.stdin);
-    let output = new OutputTermController({
+    this._inputController = new InputTermController(this.stdin);
+    this._outputController = new OutputTermController({
       term: {
         max: max
       }
     });
 
-    let self = this;
-    input
-      .pipe(child.stdin);
-    child.stdout
-      .pipe(output)
+    this._inputController
+      .pipe(this._child.stdin);
+    this._child.stdout
+      .pipe(this._outputController)
       .on('update', function(patch) {
-        self.update(patch, output);
+        self.update(patch, self._outputController);
         self.output.scrollTop(self.output[0].scrollHeight);
       });
   }
@@ -80,10 +77,28 @@ export class TerminalView extends View {
       }
     }
   }
+
+  onExit(emitExit) {
+    this._child.on('exit', emitExit);
+  }
+
+  destroy() {
+    this.subscriptions.dispose();
+    delete this.subscriptions;
+
+    this._child.kill('SIGHUP');
+    delete this._child;
+
+    this._inputController.destroy();
+    delete this._inputController;
+
+    this._outputController.destroy();
+    delete this._outputController;
+  }
 }
 
 TerminalView.content = function() {
-  let self = this;
+  const self = this;
   return this.div({
     class: 'terminal',
     style: 'display:flex;',

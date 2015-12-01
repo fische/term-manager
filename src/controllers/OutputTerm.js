@@ -6,6 +6,7 @@ let convert = new Convert();
 export class OutputTermController extends Writable {
   constructor(options) {
     super(options);
+
     this.max = options.term.max;
     // TODO Initilaize the whole array
     this.output = [""];
@@ -24,6 +25,7 @@ export class OutputTermController extends Writable {
   formatToOutput(data) {
     let line_modified = [];
     let line_deleted = 0;
+
     for (let c of data) {
       switch(c) {
         case "\x0d":
@@ -54,5 +56,9 @@ export class OutputTermController extends Writable {
 
   getLine(pos) {
     return this.output[pos];
+  }
+
+  destroy() {
+
   }
 }
