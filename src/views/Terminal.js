@@ -48,7 +48,7 @@ export class TerminalView extends View {
       env: (process.env ? process.env : {}),
       stdio: ['pty', 'pty', 'pty']
     });
-    let input = new InputTermController(this.stdin, child);
+    let input = new InputTermController(this.stdin);
     let output = new OutputTermController({
       term: {
         max: max
