@@ -4,28 +4,30 @@ const KEY_ALT = "\x12";
 
 export const KEYS_CMD = [KEY_SHIFT, KEY_CTRL, KEY_ALT];
 
-const KEY_LEFT = "\x25";
-const KEY_UP = "\x26";
-const KEY_RIGHT = "\x27";
-const KEY_DOWN = "\x28";
+export const KEYMAP_SPECIAL = {
+  "\x25": "\x1b\x5b\x44", // LEFT
+  "\x26": "\x1b\x5b\x41", // UP
+  "\x27": "\x1b\x5b\x43", // RIGHT
+  "\x28": "\x1b\x5b\x42", // DOWN
 
-const KEY_END = "\x23";
-const KEY_BEGIN = "\x24";
+  "\x23": "\x1b\x5b\x46", // END
+  "\x24": "\x1b\x5b\x45", // BEGIN
 
-const KEY_DEL = "\x2e";
+  "\x2e": "\x1b\x5b\x33\x7e", // DEL
 
-const KEY_PF1 = "\x70";
-const KEY_PF2 = "\x71";
-const KEY_PF3 = "\x72";
-const KEY_PF4 = "\x73";
-const KEY_PF5 = "\x74";
-const KEY_PF6 = "\x75";
-const KEY_PF7 = "\x76";
-const KEY_PF8 = "\x77";
-const KEY_PF9 = "\x78";
-const KEY_PF10 = "\x79";
-const KEY_PF11 = "\x7a";
-const KEY_PF12 = "\x7b";
+  "\x70": "\x1b\x4f\x50", // F1
+  "\x71": "\x1b\x4f\x51", // F2
+  "\x72": "\x1b\x4f\x52", // F3
+  "\x73": "\x1b\x4f\x53", // F4
+  "\x74": "\x1b\x5b\x31\x35\x7e", // F5
+  "\x75": "\x1b\x5b\x31\x37\x7e", // F6
+  "\x76": "\x1b\x5b\x31\x38\x7e", // F7
+  "\x77": "\x1b\x5b\x31\x39\x7e", // F8
+  "\x78": "\x1b\x5b\x32\x30\x7e", // F9
+  "\x79": "\x1b\x5b\x32\x31\x7e", // F10
+  "\x7a": "\x1b\x5b\x32\x32\x7e", // F11
+  "\x7b": "\x1b\x5b\x32\x34\x7e" // F12
+};
 
 export let cmd_keymap = {
   "ctrl": {

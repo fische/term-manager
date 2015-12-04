@@ -1,6 +1,6 @@
 import {CompositeDisposable} from 'atom'
 import {Readable} from 'stream'
-import {KEYS_CMD, cmd_keymap} from './Keymap'
+import {KEYS_CMD, KEYMAP_SPECIAL, cmd_keymap} from './Keymap'
 
 export class InputTermController extends Readable {
   constructor(source, options={}) {
@@ -52,6 +52,9 @@ export class InputTermController extends Readable {
         let map = self._getCommandMap(event, cmd_keymap);
         if (map !== undefined && map[self._buffer] !== undefined)
           self.push(map[self._buffer]);
+        event.preventDefault();
+      } else if (KEYMAP_SPECIAL[c] !== undefined) {
+        self.push(KEYMAP_SPECIAL[c]);
         event.preventDefault();
       } else if (event.keyCode <= 31 || event.keyCode == 127) { // Range of non-printable characters
         if (KEYS_CMD.indexOf(c) == -1) // Ignore command keys
