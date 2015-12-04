@@ -14,6 +14,14 @@ export class TermPaneView extends DockPaneView {
     this.terminalView.show();
   }
 
+  setActive(active)  {
+    super.setActive(active);
+    if (active)
+      this.terminalView.focus();
+    else
+      this.terminalView.blur();
+  }
+
   destroy() {
     this.terminalView.destroy();
     delete this.terminalView;

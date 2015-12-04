@@ -1,48 +1,6 @@
 import {CompositeDisposable} from 'atom'
 import {Readable} from 'stream'
-
-const SHIFT_KEY = "\x10";
-const CTRL_KEY = "\x11";
-const ALT_KEY = "\x12";
-const CMD_KEYS = [SHIFT_KEY, CTRL_KEY, ALT_KEY];
-
-let cmd_keymap = {
-  "ctrl": {
-    "cmd": {
-      "A": "\x01",
-      "B": "\x02",
-      "C": "\x03",
-      "D": "\x04",
-      "E": "\x05",
-      "F": "\x06",
-      "G": "\x07",
-      "H": "\x08",
-      "I": "\x09",
-      "J": "\x0a",
-      "K": "\x0b",
-      "L": "\x0c",
-      "M": "\x0d",
-      "N": "\x0e",
-      "O": "\x0f",
-      "P": "\x10",
-      "Q": "\x11",
-      "R": "\x12",
-      "S": "\x13",
-      "T": "\x14",
-      "U": "\x15",
-      "V": "\x16",
-      "W": "\x17",
-      "X": "\x18",
-      "Y": "\x19",
-      "Z": "\x1a",
-      "[": "\x1b",
-      "\\": "\x1c",
-      "]": "\x1d",
-      "^": "\x1e",
-      "_": "\x1f"
-    }
-  }
-};
+import {KEYS_CMD, cmd_keymap} from './Keymap'
 
 export class InputTermController extends Readable {
   constructor(source, options={}) {
@@ -74,12 +32,12 @@ export class InputTermController extends Readable {
     } else if (keyEvent.shiftKey) {
       keyEvent.shiftKey = false;
       return this._getCommandMap(keyEvent, map.shift);
-    } else
-      return (map.cmd);
+    }
+    return (map !== undefined ? map.cmd : undefined);
   }
 
   _addToBuffer(c) {
-    if (this._buffer.indexOf(c) == -1 && CMD_KEYS.indexOf(c) == -1) {
+    if (this._buffer.indexOf(c) == -1 && KEYS_CMD.indexOf(c) == -1) {
       this._buffer += c;
     }
   }
@@ -96,8 +54,8 @@ export class InputTermController extends Readable {
           self.push(map[self._buffer]);
         event.preventDefault();
       } else if (event.keyCode <= 31 || event.keyCode == 127) { // Range of non-printable characters
-        if (CMD_KEYS.indexOf(c) == -1) // Ignore command keys
-          self.push(self._buffer);
+        if (KEYS_CMD.indexOf(c) == -1) // Ignore command keys
+          self.push(c);
         event.preventDefault();
       }
     });

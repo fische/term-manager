@@ -17,8 +17,10 @@ export class OutputTermController extends Writable {
   _write(chunk, encoding, done) {
     let patch = this.formatToOutput(convert.toHtml(chunk.toString()));
 
-    if (!(this.emit('update', patch)))
+    if (!(this.emit('update', patch))) {
       console.error("OutputTermController does not have any listeners.");
+      console.info(`Chunk: \"${chunk}\" dropped !`);
+    }
     done();
   }
 
