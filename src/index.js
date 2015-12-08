@@ -11,7 +11,7 @@ module.exports = {
     packageFound = atom.packages.getAvailablePackageNames().indexOf('bottom-dock') !== -1;
     if (!packageFound) {
       atom.notifications.addError('Could not find Bottom-Dock', {
-        detail: 'Term-Manager: The bottom-dock package is a dependency. \n Learn more about bottom-dock here: https://atom.io/packages/bottom-dock',
+        detail: 'Term-Manager: The bottom-dock package is a dependency.\nLearn more about bottom-dock here: https://atom.io/packages/bottom-dock',
         dismissable: true
       });
     }
@@ -24,6 +24,9 @@ module.exports = {
         };
       })(this)
     }));
+  },
+  consumeBottomDock: function(bottomDock) {
+    this.bottomDock = bottomDock;
 
     const self = this;
     this.paneEventEmitter = new EventEmitter();
@@ -31,9 +34,13 @@ module.exports = {
       self.bottomDock.deletePane(pane.getId());
       delete self.termPanes[self.termPanes.indexOf(pane)];
     });
-  },
-  consumeBottomDock: function(bottomDock) {
-    this.bottomDock = bottomDock;
+
+    this.bottomDock.onDidFinishResizing(function() {
+      let pane = self.bottomDock.getCurrentPane();
+      if (pane instanceof TermPaneView)
+        pane.resize();
+    });
+
     this.add();
   },
   add: function() {

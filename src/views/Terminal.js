@@ -21,7 +21,8 @@ function getColumns(div) {
 }
 
 function getRows(div) {
-  let height = parseFloat(div.css('line-height'));
+  let height = div.css('line-height');
+  height = (height == "" ? 0 : parseFloat(height));
   return (height == 0 ? 0 : Math.floor(div.height() / height));
 }
 
@@ -33,7 +34,7 @@ export class TerminalView extends View {
   */
   initialize() {
     // TODO Option (max line cache)
-    this.max = 1000
+    this.max = 200
 
     // TODO Option (font size)
     this.font = 12
@@ -70,33 +71,6 @@ export class TerminalView extends View {
     this.addEventListener(this.output, 'click', function() {
       self.stdin.focus();
     });
-    this.addEventListener(this.output, 'resize', function() {
-      self.resize();
-    });
-  }
-
-
-  /*
-    Use json patch to update the output div with the output stream.
-    Patch format :
-      {
-        deletion: Number of line to delete,
-        addition: Array of index of the line to update
-      }
-  */
-  _update(patch, output) {
-    while (patch.deletion > 0) {
-      this.output[0].children[0].remove();
-      patch.deletion -= 1;
-    }
-    for (let line of patch.addition) {
-      if (line >= 0) {
-        if (line < this.output[0].children.length)
-          this.output[0].children[line].innerHTML = output.getLine(line);
-        else
-          this.output.append("<div>" + output.getLine(line) + "</div>");
-      }
-    }
   }
 
 
@@ -121,8 +95,8 @@ export class TerminalView extends View {
       .pipe(this._child.stdin);
     this._child.stdout
       .pipe(this._outputController)
-      .on('update', function(patch) {
-        self._update(patch, self._outputController);
+      .on('update', function() {
+        self.output.html(self._outputController.getOutput());
         self.output.scrollTop(self.output[0].scrollHeight);
       });
   }

@@ -22,6 +22,10 @@ export class TermPaneView extends DockPaneView {
       this.terminalView.blur();
   }
 
+  resize() {
+    this.terminalView.resize();
+  }
+
   destroy() {
     this.terminalView.destroy();
     delete this.terminalView;
@@ -33,6 +37,7 @@ TermPaneView.content = function() {
   const self = this;
   return this.div({
     class: 'term-pane',
+    outlet: 'termpane',
     style: 'display:flex;'
   }, function() {
     return self.subview('terminalView', new TerminalView());
