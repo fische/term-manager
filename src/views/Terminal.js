@@ -4,6 +4,7 @@ import {InputTermController} from '../controllers/InputTerm'
 import {OutputTermController} from '../controllers/OutputTerm'
 import {spawn} from 'child_pty'
 
+
 let tmp = $("<div>r</div>")
           .css({
             'position': 'absolute',
@@ -12,6 +13,10 @@ let tmp = $("<div>r</div>")
             'visibility': 'hidden'
           });
 
+
+/*
+  Get columns number in one row of div.
+*/
 function getColumns(div) {
   let font = div.css('font');
   tmp.css('font', font).appendTo($('body'));
@@ -20,11 +25,16 @@ function getColumns(div) {
   return (width == 0 ? 0 : Math.floor(div.width() / width));
 }
 
+
+/*
+  Get rows number of div.
+*/
 function getRows(div) {
   let height = div.css('line-height');
   height = (height == "" ? 0 : parseFloat(height));
   return (height == 0 ? 0 : Math.floor(div.height() / height));
 }
+
 
 export class TerminalView extends View {
   /*
@@ -64,12 +74,15 @@ export class TerminalView extends View {
 
 
   /*
-    Set event of the terminal's output.
+    Set event of the terminal dock.
   */
   setEvent() {
     const self = this;
     this.addEventListener(this.output, 'click', function() {
       self.stdin.focus();
+    });
+    this.addEventListener($(window), 'resize', function() {
+      self.resize();
     });
   }
 
@@ -164,6 +177,10 @@ export class TerminalView extends View {
   }
 }
 
+
+/*
+  View setup of terminal.
+*/
 TerminalView.content = function() {
   const self = this;
   return this.div({

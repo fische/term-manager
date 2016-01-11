@@ -4,6 +4,9 @@ import {$} from 'space-pen'
 import {TerminalView} from './Terminal'
 
 export class TermPaneView extends DockPaneView {
+  /*
+    Initialize Dock Pane View and emit exit event on exit.
+  */
   initialize(emitter) {
     super.initialize();
 
@@ -14,6 +17,10 @@ export class TermPaneView extends DockPaneView {
     this.terminalView.show();
   }
 
+
+  /*
+    Set focus/blur Terminal view whether active arg is true or not.
+  */
   setActive(active)  {
     super.setActive(active);
     if (active)
@@ -22,10 +29,18 @@ export class TermPaneView extends DockPaneView {
       this.terminalView.blur();
   }
 
+
+  /*
+    Resize terminal view.
+  */
   resize() {
     this.terminalView.resize();
   }
 
+
+  /*
+    Remove itself from bottom dock.
+  */
   destroy() {
     this.terminalView.destroy();
     delete this.terminalView;
@@ -33,6 +48,9 @@ export class TermPaneView extends DockPaneView {
   }
 }
 
+/*
+  View setup of terminal pane.
+*/
 TermPaneView.content = function() {
   const self = this;
   return this.div({
