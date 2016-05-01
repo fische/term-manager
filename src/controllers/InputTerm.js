@@ -76,9 +76,10 @@ export class InputTermController extends Readable {
     });
   }
 
-  _read(size: number) {
-
-  }
+  /*
+    Do nothing as data sent are handled by event.
+  */
+  _read(size) {}
 
   destroy() {
     this.subscriptions.dispose();

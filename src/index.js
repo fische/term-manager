@@ -22,6 +22,11 @@ module.exports = {
         return function() {
           return _this.add();
         };
+      })(this),
+      'term-manager:focus-active-term': (function(_this) {
+        return function() {
+          return _this.focusActiveTerm();
+        };
       })(this)
     }));
   },
@@ -54,6 +59,14 @@ module.exports = {
         active: newPane.isActive()
       };
       this.bottomDock.addPane(newPane, 'Term');
+    }
+  },
+  focusActiveTerm: function() {
+    if (this.bottomDock && this.bottomDock.isActive()) {
+      let currentPane = this.bottomDock.getCurrentPane();
+      if (currentPane instanceof TermPaneView) {
+        currentPane.focus();
+      }
     }
   },
   deactivate: function() {

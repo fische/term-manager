@@ -31,6 +31,14 @@ export class TermPaneView extends DockPaneView {
 
 
   /*
+    Focus term
+  */
+  focus() {
+    this.terminalView.focus();
+  }
+
+
+  /*
     Resize terminal view.
   */
   resize() {

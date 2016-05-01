@@ -24,11 +24,15 @@ export class OutputTermController extends Writable {
     done();
   }
 
+  //TODO Interpret all special characters.
+  //TODO Add colors (surround whole lines by <span style="color: white;"></span>)
   formatToOutput(data) {
     for (let c of data) {
       switch(c) {
         case "\x07":
+          break;
         case "\x0d":
+          this.x = 0;
           break;
         case "\x0a":
           while (this.output.length >= (this.max - 1)) {
@@ -37,7 +41,6 @@ export class OutputTermController extends Writable {
           }
           this.output.push("");
           this.y += 1;
-          this.x = 0;
           break;
         default:
           this.output[this.y] = this.output[this.y].slice(0, this.x) + c + this.output[this.y].slice(this.x, this.output[this.y].length);
@@ -46,8 +49,9 @@ export class OutputTermController extends Writable {
     }
   }
 
+  //TODO Make
   getOutput() {
-    return "<div>" + this.output.join("</div><div>") + "</div>";
+    return "<span>" + this.output.join("<br/>") + "</span>";
   }
 
   destroy() {
