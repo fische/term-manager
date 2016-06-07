@@ -43,7 +43,7 @@ gulp.task('build-dev', ['hint'], function() {
              .pipe(gulp.dest('lib'));
 });
 
-gulp.task('build-prod', ['flow'], function() {
+gulp.task('build-prod', ['hint'], function() {
   return gulp.src(['src/**/*.js'])
              .pipe(babel({
                sourceMaps: false,
