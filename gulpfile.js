@@ -4,6 +4,12 @@ var eslint = require('gulp-eslint');
 var flow = require('gulp-flowtype');
 var notify = require('gulp-notify');
 var changed = require('gulp-changed');
+var clean = require('gulp-clean');
+
+gulp.task('clean', function() {
+  return gulp.src('lib', { read: false })
+          .pipe(clean({ force: true }));
+});
 
 gulp.task('hint', function() {
   return gulp.src(['src/**/*.js'], { write: false })
@@ -37,7 +43,7 @@ gulp.task('build-dev', ['hint'], function() {
              .pipe(gulp.dest('lib'));
 });
 
-gulp.task('build-prod', ['flow'], function() {
+gulp.task('build-prod', ['hint'], function() {
   return gulp.src(['src/**/*.js'])
              .pipe(babel({
                sourceMaps: false,
