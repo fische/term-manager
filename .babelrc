@@ -1,5 +1,5 @@
 {
   "plugins": ["syntax-flow", "transform-flow-strip-types"],
-  "presets": ["babel-preset-es2015"],
+  "presets": ["babel-preset-es2015", "react"],
   "comments": false
 }

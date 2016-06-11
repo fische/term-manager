@@ -1,7 +1,7 @@
 import {CompositeDisposable} from 'atom'
 import {EventEmitter} from 'events'
 
-import {TermPaneView} from './views/TermPane'
+import {TermPaneView} from './components/TermPane'
 
 module.exports = {
   activate: function(state) {
