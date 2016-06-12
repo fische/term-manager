@@ -1,7 +1,6 @@
 var gulp = require('gulp');
 var babel = require('gulp-babel');
 var eslint = require('gulp-eslint');
-var flow = require('gulp-flowtype');
 var notify = require('gulp-notify');
 var changed = require('gulp-changed');
 var clean = require('gulp-clean');
