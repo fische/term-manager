@@ -3,7 +3,6 @@ import { React } from 'react-for-atom'
 export class Stdin extends React.Component {
   constructor(props: object) {
     super(props);
-    console.log("constructor");
   }
 
   focus() {
@@ -14,14 +13,17 @@ export class Stdin extends React.Component {
     this.refs.stdin.blur();
   }
 
-  onKeyPress(e) {
-    console.log(e);
+  onKeyDown(e) {
+    console.log(atom.keymaps.keystrokeForKeyboardEvent(e));
+  }
+
+  componentDidMount() {
+    this.refs.stdin.addEventListener('keydown', this.onKeyDown);
   }
 
   render() {
-    console.log("render");
     return (
-      <input ref="stdin" onKeyPress={ this.onKeyPress.bind(this) } />
+      <input ref="stdin" />
     );
   }
 }
