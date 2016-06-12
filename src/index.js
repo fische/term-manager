@@ -1,14 +1,12 @@
 import { CompositeDisposable } from 'atom'
 import { EventEmitter } from 'events'
-import { TermPane } from './components/TermPane'
+import { Pane } from './components/Pane/Pane'
 
 module.exports = {
   termPanes: [],
 
-  activate: function(state: object) {
-    //TODO Rebuild all termPanes from state object
-    console.log(state)
-
+  //TODO Rebuild all termPanes from state object
+  activate: function() {
     let packageFound;
     packageFound = atom.packages.getAvailablePackageNames().indexOf('bottom-dock') !== -1;
     if (!packageFound) {
@@ -37,7 +35,7 @@ module.exports = {
   add: function() {
     if (this.bottomDock) {
       let newPane;
-      newPane = new TermPane(this.paneEventEmitter);
+      newPane = new Pane(this.paneEventEmitter);
       this.termPanes.push(newPane);
       this.bottomDock.addPane(newPane, 'Term');
     }
