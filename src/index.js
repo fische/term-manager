@@ -1,11 +1,13 @@
-import {CompositeDisposable} from 'atom'
-import {EventEmitter} from 'events'
-
-import {TermPaneView} from './components/TermPane'
+import { CompositeDisposable } from 'atom'
+import { EventEmitter } from 'events'
+import { TermPane } from './components/TermPane'
 
 module.exports = {
-  activate: function(state) {
-    this.termPanes = [];
+  termPanes: [],
+
+  activate: function(state: object) {
+    //TODO Rebuild all termPanes from state object
+    console.log(state)
 
     let packageFound;
     packageFound = atom.packages.getAvailablePackageNames().indexOf('bottom-dock') !== -1;
@@ -18,62 +20,36 @@ module.exports = {
 
     this.subscriptions = new CompositeDisposable();
     this.subscriptions.add(atom.commands.add('atom-workspace', {
-      'term-manager:add': (function(_this) {
+      'term-manager:add': (function(_this: object): () => void {
         return function() {
-          return _this.add();
-        };
-      })(this),
-      'term-manager:focus-active-term': (function(_this) {
-        return function() {
-          return _this.focusActiveTerm();
+          _this.add();
         };
       })(this)
     }));
   },
-  consumeBottomDock: function(bottomDock) {
+  consumeBottomDock: function(bottomDock: any) {
     this.bottomDock = bottomDock;
 
-    const self = this;
     this.paneEventEmitter = new EventEmitter();
-    this.paneEventEmitter.on('exit', function(pane) {
-      self.bottomDock.deletePane(pane.getId());
-      delete self.termPanes[self.termPanes.indexOf(pane)];
-    });
-
-    this.bottomDock.onDidFinishResizing(function() {
-      let pane = self.bottomDock.getCurrentPane();
-      if (pane instanceof TermPaneView)
-        pane.resize();
-    });
 
     this.add();
   },
   add: function() {
     if (this.bottomDock) {
-      let config, newPane;
-      newPane = new TermPaneView(this.paneEventEmitter);
+      let newPane;
+      newPane = new TermPane(this.paneEventEmitter);
       this.termPanes.push(newPane);
-      config = {
-        name: 'Term',
-        id: newPane.getId(),
-        active: newPane.isActive()
-      };
       this.bottomDock.addPane(newPane, 'Term');
-    }
-  },
-  focusActiveTerm: function() {
-    if (this.bottomDock && this.bottomDock.isActive()) {
-      let currentPane = this.bottomDock.getCurrentPane();
-      if (currentPane instanceof TermPaneView) {
-        currentPane.focus();
-      }
     }
   },
   deactivate: function() {
     this.subscriptions.dispose();
     delete this.subscriptions;
 
-    let i, len, pane, ref, results;
+    let i,
+      len,
+      pane,
+      ref;
     ref = this.termPanes;
     for (i = 0, len = ref.length; i < len; i++) {
       pane = ref[i];

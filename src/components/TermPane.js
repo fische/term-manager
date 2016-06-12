@@ -1,71 +1,59 @@
-import {DockPaneView} from 'atom-bottom-dock'
-import {$} from 'space-pen'
+import { React, ReactDOM } from 'react-for-atom'
 
-import {TerminalView} from './Terminal'
+import { DockPaneView } from 'atom-bottom-dock'
+import { EventEmitter } from 'events'
 
-export class TermPaneView extends DockPaneView {
+import {Terminal} from './Terminal'
+
+export class TermPane extends DockPaneView {
   /*
-    Initialize Dock Pane View and emit exit event on exit.
+    Initializes Dock Pane View.
   */
-  initialize(emitter) {
+  initialize(emitter: EventEmitter) {
     super.initialize();
-
-    const self = this;
-    this.terminalView.onExit(function() {
-      emitter.emit('exit', self);
-    });
-    this.terminalView.show();
+    ReactDOM.render(<Terminal emitter={emitter} />, this.element);
   }
 
-
-  /*
-    Set focus/blur Terminal view whether active arg is true or not.
-  */
-  setActive(active)  {
-    super.setActive(active);
-    if (active)
-      this.terminalView.focus();
-    else
-      this.terminalView.blur();
-  }
-
-
-  /*
-    Focus term
-  */
-  focus() {
-    this.terminalView.focus();
-  }
-
-
-  /*
-    Resize terminal view.
-  */
-  resize() {
-    this.terminalView.resize();
-  }
-
-
-  /*
-    Remove itself from bottom dock.
-  */
-  destroy() {
-    this.terminalView.destroy();
-    delete this.terminalView;
-    this.remove();
-  }
+  // /*
+  //   Set focus/blur Terminal view whether active arg is true or not.
+  // */
+  // setActive(active: bool) {
+  //   super.setActive(active);
+  //   // if (active)
+  //   //   this.terminalView.focus();
+  //   // else
+  //   //   this.terminalView.blur();
+  // }
+  //
+  //
+  // /*
+  //   Focus term
+  // */
+  // focus() {
+  //   // this.terminalView.focus();
+  // }
+  //
+  //
+  // /*
+  //   Resize terminal view.
+  // */
+  // resize() {
+  //   // this.terminalView.resize();
+  // }
+  //
+  //
+  // /*
+  //   Remove itself from bottom dock.
+  // */
+  // destroy() {
+  //   // this.terminalView.destroy();
+  //   // delete this.terminalView;
+  //   // this.remove();
+  // }
 }
 
-/*
-  View setup of terminal pane.
-*/
-TermPaneView.content = function() {
-  const self = this;
+TermPane.content = function(): number {
   return this.div({
-    class: 'term-pane',
-    outlet: 'termpane',
-    style: 'display:flex;'
-  }, function() {
-    return self.subview('terminalView', new TerminalView());
+    class: "term-pane"
   });
 };
