@@ -1,6 +1,5 @@
 {
   "atom-workspace": {
-    "ctrl-k alt-t": "term-manager:add",
-    "ctrl-k ctrl-f": "term-manager:focus-active-term"
+    "ctrl-k alt-t": "term-manager:add"
   }
 }
