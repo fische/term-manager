@@ -1,18 +1,20 @@
 import { React } from 'react-for-atom'
-import { EventEmitter } from 'events'
 import pty from 'pty.js'
 
 import { Stdin } from '../Stdin/Stdin'
 
+//TODO Handle exit (from atom + from pty)
+
 export class Terminal extends React.Component {
   constructor(props: object) {
     super(props);
+
     this.state = {
       max: props.maxLines,
       font: props.fontSize
     };
 
-    this.focus = this.focus.bind(this);
+    //Setup term
     this.term = pty.spawn(process.env.SHELL, [], {
       name: process.env.TERM,
       cols: 80, //TODO detect cols
@@ -23,6 +25,10 @@ export class Terminal extends React.Component {
     this.term.on('data', function(data: string) {
       console.log(data);
     });
+    this.term.on('exit', props.onExit);
+
+    //Method Binding
+    this.focus = this.focus.bind(this);
   }
 
   focus() {
@@ -43,7 +49,7 @@ export class Terminal extends React.Component {
 }
 
 Terminal.propTypes = {
-  emitter: React.PropTypes.instanceOf(EventEmitter).isRequired,
+  onExit: React.PropTypes.func.isRequired,
   maxLines: React.PropTypes.number,
   fontSize: React.PropTypes.number
 };

@@ -1,24 +1,36 @@
 import { React } from 'react-for-atom'
 import { Writable } from 'stream'
 
+import { IsCmdKey, GetSpecialKey, GetKey } from '../../controllers/Key.js'
+
 const unicode = /U\+[0-9A-F]{4}/;
 
 function checkUnicodeIdentifier(id: string): bool {
   return unicode.test(id);
 }
 
+function isCommand(e): bool {
+  return (e.ctrlKey || e.altKey || e.shiftKey);
+}
+
 function onKeyPress(s: Stdin) {
   return function(e) {
-    //TODO handle combination with modifier keys
     s.write(String.fromCharCode(e.charCode));
   }
 }
 
 function onKeyDown(s: Stdin) {
-  console.log(s);
   return function(e) {
-    if (e.keyCode < 32 || !(checkUnicodeIdentifier(e.keyIdentifier))) {
-      console.log("keydown", e);
+    if (e.keyCode < 32
+      || !checkUnicodeIdentifier(e.keyIdentifier)
+      || isCommand(e)) {
+      let c = String.fromCharCode(e.keyCode);
+      let n;
+      if ((n = GetSpecialKey(c)) != c) {
+        s.write(n);
+      } else if (!IsCmdKey(c)) {
+        s.write(GetKey(e, c));
+      }
       e.preventDefault();
     }
   }
