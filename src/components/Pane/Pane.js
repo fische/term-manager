@@ -7,7 +7,13 @@ import { Terminal } from '../Terminal/Terminal'
 export class Pane extends DockPaneView {
   initialize(emitter: EventEmitter) {
     super.initialize();
-    this.terminal = ReactDOM.render(<Terminal emitter={emitter} />, this.element);
+
+    const self = this;
+
+    let exit = function() {
+      emitter.emit('exit', self);
+    };
+    this.terminal = ReactDOM.render(<Terminal onExit={exit} />, this.element);
   }
 
   setActive(active: boolean) {
@@ -21,7 +27,9 @@ export class Pane extends DockPaneView {
     }
   }
 
-  destroy() {}
+  destroy() {
+    ReactDOM.unmountComponentAtNode(this.element);
+  }
 }
 
 Pane.content = function(): number {

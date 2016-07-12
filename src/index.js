@@ -28,7 +28,12 @@ module.exports = {
   consumeBottomDock: function(bottomDock: any) {
     this.bottomDock = bottomDock;
 
+    const self = this;
     this.paneEventEmitter = new EventEmitter();
+    this.paneEventEmitter.on('exit', function(pane) {
+      self.bottomDock.deletePane(pane.getId());
+      delete self.termPanes[self.termPanes.indexOf(pane)];
+    });
 
     this.add();
   },

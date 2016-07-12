@@ -16,16 +16,11 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
-    "ansi-to-html": "^0.4.1",
     "atom": "^1.0.0",
     "atom-bottom-dock": "^0.5.3",
-    "babel-eslint": "^6.0.4",
-    "child_pty": "^3.0.1",
-    "eslint": "^2.9.0",
-    "events": "^1.1.0",
-    "gulp-eslint": "^2.0.0",
     "react-for-atom": "^15.0.2-1",
-    "space-pen": "^5.1.2"
+    "space-pen": "^5.1.2",
+    "pty.js": "~0.3.0"
   },
   "packageDependencies": {
     "bottom-dock": "^0.2.0"

@@ -6,6 +6,8 @@ var changed = require('gulp-changed');
 var clean = require('gulp-clean');
 var todo = require('gulp-todo');
 
+//TODO Re-add flowcheck
+
 gulp.task('todo', function() {
   gulp.src('src/**/*.js')
     .pipe(todo())
